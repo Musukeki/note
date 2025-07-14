@@ -49,5 +49,16 @@ export class Appcomponent 代表將類別名稱為 Appcomponent 的這個元件�
 ** 函式/方法 **
 函式宣告方式 -> 函式名稱() {}，且 () 中可帶入參數，同時帶入的參數也要設定型別，ex: fn(par: string) {}
 
-** 生命週期 **
+** 常用生命週期 **
+constructor -> 建構式，並非正式生命週期階段，當 class 元件(Component)建立時會先被呼叫，是元件被建構的第一步，用來注入依賴(資料服務、API 工具、登入系統等)，ex: constructor(private userService: UserService) {} 用白話文可以理解成「這個元件需要一個叫 UserService 的工具來幫我處理用戶資料。你幫我準備好它，一開工我就能用。」，此時 Angular 會自動幫你「準備好」這個服務（物件），你就不用自己去 new 它、建立它。
 
+ngOnInit -> 初始化(畫面剛載入)開始時執行，只會執行一次，通常都是用來處理初始要設定的程式碼。
+
+ngAfterViewInit -> 畫面載入完成後執行，有時候畫面載入較慢而程式碼執行較快，因此在 ngOnInit 設定邏輯可能會導致資料顯示不如預期，此時就可以在 ngAfterViewInit 中設定。
+
+生命週期不同的方法可以一次使用多個，視情況而定。
+
+補充說明：ngOnInit(): void {} 這裡的 void 是一種回傳型別，表示這個函式「不會回傳任何結果」，換句話說，它只是「做事情」，像是載入資料、初始化變數等，但不會回傳值給誰。
+
+** 型別轉換 **
+JSON 轉 String -> JSON.stringify(JSON格式資料)
