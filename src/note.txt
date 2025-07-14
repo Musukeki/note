@@ -1,16 +1,16 @@
-** NVM **
+### NVM ###
 安裝 NVM -> https://github.com/coreybutler/nvm-windows/releases -> nvm-setup.exe
 安裝 node -> nvm install 22.16.0
 檢查 node 版本 -> node -v
 切換 node 版本 -> nvm use 版本號
 
-** Angular **
+### Angular ###
 安裝(全域 Global) Angular -> npm install -g @angular/cli@版本號
 檢查 Angular 版本 -> ng v
 建立 Angualr 專案 -> ng new 專案資料夾名稱
 開啟 Angular 專案 -> 路徑移動至專案資料夾 > ng server 或 ng server --o 或簡寫 ng s/ng s --o
 
-** Angular 專案架構 **
+### Angular 專案架構 ###
 src/app/
   style.scss -> 全域的樣式設定
   main.ts -> 程式初始設定(非必要不要更改內容)
@@ -21,7 +21,7 @@ src/app/
   app.config.ts -> 配置文件(依照套件需求更改內容)
   app.routes.ts -> 路由設置文件
 
-** 元件 **
+### 元件 ###
 @Component 是元件(畫面)的相關設定，selector、templateUrl、styleUrls、imports 等等。
 補充：app.component.ts 中 @Component 裡面的 selector: 'app-root' 表示將該元件對應的 html 中 body 的內容包裝成一個標籤(<app-root>)，並放置在想要顯示這些內容的 html 文件的 body 標籤中，以 app.component.ts 為例，預設放置位置在 app.component.html 中的 body 標籤中。
 
@@ -29,7 +29,7 @@ src/app/
 
 export class Appcomponent 代表將類別名稱為 Appcomponent 的這個元件做匯出，讓它在其他地方可以被引用，{}中是該元件的邏輯區域。
 
-** 變數 **
+### 變數 ###
 (全域)變數宣告方式 -> 變數名稱: 變數型別 = 初始值，ex: name: string = 'Tom';
 
 (區域)變數宣告方式 -> 函式或區塊中透過 var、let、const 變數名稱 = 變數值。
@@ -46,10 +46,10 @@ export class Appcomponent 代表將類別名稱為 Appcomponent 的這個元件�
 
 只有全域變數可以使用 {{ 變數名稱 }} 來讓變數內容呈現在 html 畫面中。
 
-** 函式/方法 **
+### 函式/方法 ###
 函式宣告方式 -> 函式名稱() {}，且 () 中可帶入參數，同時帶入的參數也要設定型別，ex: fn(par: string) {}
 
-** 常用生命週期 **
+### 常用生命週期 ###
 constructor -> 建構式，並非正式生命週期階段，當 class 元件(Component)建立時會先被呼叫，是元件被建構的第一步，用來注入依賴(資料服務、API 工具、登入系統等)，ex: constructor(private userService: UserService) {} 用白話文可以理解成「這個元件需要一個叫 UserService 的工具來幫我處理用戶資料。你幫我準備好它，一開工我就能用。」，此時 Angular 會自動幫你「準備好」這個服務（物件），你就不用自己去 new 它、建立它。
 
 ngOnInit -> 初始化(畫面剛載入)開始時執行，只會執行一次，通常都是用來處理初始要設定的程式碼。
@@ -60,5 +60,5 @@ ngAfterViewInit -> 畫面載入完成後執行，有時候畫面載入較慢而�
 
 補充說明：ngOnInit(): void {} 這裡的 void 是一種回傳型別，表示這個函式「不會回傳任何結果」，換句話說，它只是「做事情」，像是載入資料、初始化變數等，但不會回傳值給誰。
 
-** 型別轉換 **
+### 型別轉換 ###
 JSON 轉 String -> JSON.stringify(JSON格式資料)
