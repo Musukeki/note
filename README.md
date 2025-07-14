@@ -16,7 +16,7 @@ src/app/
   main.ts -> 程式初始設定(非必要不要更改內容)
   index.html -> 網站的 head 內容設定與 <app-root> 放置位置
   檔名.spec.ts -> 測試文件(用不到可刪除)
-  app.component.html -> 使用者看到的畫面模板、預設的網站首頁
+  app.component.html -> 使用者看到的畫面模板、預設的網站首頁、所有頁面共用的內容。
   app.component.ts -> 負責對應名稱的 html 文件中，元件類別(Class)的相關邏輯，如：變數宣告、函式宣告、Interface 設定等等。
   app.config.ts -> 配置文件(依照套件需求更改內容)
   app.routes.ts -> 路由設置文件
@@ -80,6 +80,30 @@ TypeScript 中的 for 迴圈沒有索引位置，如需要取用索引位置可�
 事件綁定 -> 在 html 標籤中加上 (事件類型 event)="函式名稱"，ex: <button (click)="函式名稱">按鈕</button>
 以上三者為單向綁定，簡單來說就是 ts 會觸發畫面(html)的更新，並且畫面的變更時不會影響 ts 的內容。
 
-雙向綁定 -> 在支持雙向綁定的表單標籤內加入 [(ngModel)]="變數名稱"，該變數名稱宣告在全域，用來儲存使用者輸入的值，使值與 ts 變數進行雙向連結。
+雙向綁定 -> 在支持雙向綁定的 "表單相關" 標籤內加入 [(ngModel)]="變數名稱"，該變數名稱宣告在全域，用來儲存使用者輸入的值，使值與 ts 變數進行雙向連結。
 雙向綁定無論是 ts 內容或是 html 內容其中一邊有變更，另一邊就會跟著變更，是雙向性，此外，在使用雙向綁定(ngModel)之前，需要在對應的 ts 文件中引入 FormsModule。
-###  ###
+
+### 路由 ###
+建立路由 -> 在 app.routes.ts 中匯入(import)要使用路由的頁面(component)，並確認 app.config.ts 文件中是否有將 providerRouter(routes) 新增至 providers 陣列裡面。
+
+定義路由線路：
+  1.設定一個陣列(專案建立時預設已建加入)
+  2.在陣列中定義路由路線，每筆資料為一個路由設定(物件格式)，ex: { path: '頁面名稱(可自訂)', component: 頁面/元件名稱 }，表示該網址對應哪個頁面/元件名稱。
+  3.將設定的路線加進畫面或者 ts 中。
+
+設定重新導向 -> { path: '', redirecTo: '/要重新導向的頁面', pathMatch: 'full' }，通常用來導向首頁。
+
+設定錯誤頁面 -> 將屬性 path 設定為 '**'，並將 component 設定為網址錯誤時要導向的頁面/元件名稱。
+補充說明：錯誤頁面的設定要寫在路由陣列的最後一筆。
+
+子路由(嵌套路由) -> 在路由設定 path: ... 最後方加上逗號並新增 children 陣列，陣列中每筆資料為一個子路由設定(物件格式)。
+
+設定路由路線後實作切換畫面：
+使用之前需要先引入 RouterOutlet、RouterLink、RouterLinkActive 三個套件。
+  RouterOutlet -> 引入後可在對應的 html 文件中加上標籤 <router-outlet></router-outlet>，放置標籤的位置會顯示路由頁面名稱的內容，簡單來說，加入該標籤後程式會根據網址去切換成對應 html 頁面中 @Component 裡面的 selector(標籤)名稱，ex: 假設網址為 localhost:4200/first，此時 <router-outlet></router-outlet> 就會等同於 <app-first></app-first>。
+
+  RouterLink -> 引入後可以用來指定要切換的網頁路徑，ex: <a routerLink="/路由名稱">
+
+  HTML 導航 ->
+
+  使用 TS 程式切換 -> 
