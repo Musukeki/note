@@ -53,7 +53,8 @@ export class Appcomponent 代表將類別名稱為 Appcomponent 的這個元件�
 函式宣告方式 -> 函式名稱() {}，且 () 中可帶入參數，同時帶入的參數也要設定型別，ex: fn(par: string) {}
 
 ### 常用生命週期 ###
-constructor -> 建構式，並非正式生命週期階段，當 class 元件(Component)建立時會先被呼叫，是元件被建構的第一步，用來注入依賴(資料服務、API 工具、登入系統等)，ex: constructor(private userService: UserService) {} 用白話文可以理解成「這個元件需要一個叫 UserService 的工具來幫我處理用戶資料。你幫我準備好它，一開工我就能用。」，此時 Angular 會自動幫你「準備好」這個服務（物件），你就不用自己去 new 它、建立它。
+constructor -> 建構式，並非正式生命週期階段，當 class 元件(Component)建立時會先被呼叫，是元件被建構的第一步，用來宣告該頁面的 TS 會使用到的服務、套件、函式等等，ex: constructor(private userService: UserService) {} 用白話文可以理解成「這個元件需要一個叫 UserService 的服務來幫我處理用戶資料。你幫我準備好它，一開工我就能用。」，此時 Angular 會自動幫你「準備好」這個服務（物件），你就不用自己去 new 它、建立它。以要使用路由為例，需要在建構式中加入路由套件，ex: constructor(private router: Router) {}，private 表示非公開(只能在該 ts 中使用)、router(用來接收該套件的全域變數名稱)、Router(套件的函式/方法內容)，因此後續在該 ts 中要使用該套件時，就可以透過 this.router.要使用的函式/方法 來呼叫使用。
+補充：@Component 中的 imports 為畫面要使用的套件，class AppComponent 中的建構式 constructor() 用來宣告全域變數，表示下方 ts 要使用到的套件。
 
 ngOnInit -> 初始化(畫面剛載入)開始時執行，只會執行一次，通常都是用來處理初始要設定的程式碼。
 
@@ -102,8 +103,24 @@ TypeScript 中的 for 迴圈沒有索引位置，如需要取用索引位置可�
 使用之前需要先引入 RouterOutlet、RouterLink、RouterLinkActive 三個套件。
   RouterOutlet -> 引入後可在對應的 html 文件中加上標籤 <router-outlet></router-outlet>，放置標籤的位置會顯示路由頁面名稱的內容，簡單來說，加入該標籤後程式會根據網址去切換成對應 html 頁面中 @Component 裡面的 selector(標籤)名稱，ex: 假設網址為 localhost:4200/first，此時 <router-outlet></router-outlet> 就會等同於 <app-first></app-first>。
 
-  RouterLink -> 引入後可以用來指定要切換的網頁路徑，ex: <a routerLink="/路由名稱">
+  RouterLink(HTML 導航) -> 引入後可以用來指定要切換的網頁路徑，ex: <a routerLink="/要切換的路由路徑">，routerLink 可以設定在任意 html 標籤中。
 
-  HTML 導航 ->
+  RouterLinkActive -> 當頁面網址與路由路徑相同時，會套用 CSS 樣式設定，ex: <a routerLink="/路由路徑" routerLinkActive="CSS 選擇器">。
 
-  使用 TS 程式切換 -> 
+  使用 TS 程式切換 -> 建構式中宣告代表路由套件的全域變數，並使用該套件底下的函式/方法 navigate、navigateByUrl 來做切換，ex: this.router.navigate(['/要切換的路由路徑'])、navigateByUrl(['/要切換的路由路徑'])，可以寫在函式/方法中並搭配點擊事件觸發頁面切換。
+  範例 1：<button (click)="checkTo()">切換頁面</button>，checkTo() { this.router.navigateByUrl(['/要切換的路由路徑']) }。
+  範例 2：<button (click)="checkTo('/要切換的路由路徑')">切換頁面</button>，checkTo(url: string) { this.router.navigateByUrl([url]) }。
+
+### 路由資料傳遞 ###
+建立 service 服務 -> ng generate service @service/服務名稱，簡寫 ng g s 服務資料夾/服務名稱。
+
+服務名稱.service.ts 文件中 import { Injectable } 開始到 @Injectable({ pro... }) 結束，這段表示這支 ts 檔案的內容可以讓所有元件/頁面共同使用。
+
+資料傳遞方式：
+  1.在服務中宣告一個全域變數，用來存放要傳遞的資料內容。
+  2.在第一個頁面(要傳遞資料的頁面)的 ts 文件中新增建構式，並加入先前宣告存放傳遞資料的服務名稱。
+  3.在第一個頁面的 html 文件中的標籤設定點擊事件綁定，並使用 Router 中的 navigateByUrl 方法觸發換頁。
+  4.在觸發換頁的方法中，將共用服務中宣告用來存放要傳遞的資料內容的變數，賦予要傳遞的資料值。
+  5.在第二個頁面(要接收資料的頁面)的 ts 文件中新增建構式，並加入先前宣告存放傳遞資料的服務名稱。
+  6.在第二個頁面中宣告一個變數，用來存放服務中全域變數變數內容。
+  原理：切換頁面前，將第一個頁面要傳遞的資料存放到服務(service)中的全域變數，觸發換頁時，第二個頁面再將服務中全域變數的資料存放到第二個頁面的 ts 文件中新增的變數裡面。
