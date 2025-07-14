@@ -22,12 +22,15 @@ src/app/
   app.routes.ts -> 路由設置文件
 
 ### 元件 ###
-@Component 是元件(畫面)的相關設定，selector、templateUrl、styleUrls、imports 等等。
-補充：app.component.ts 中 @Component 裡面的 selector: 'app-root' 表示將該元件對應的 html 中 body 的內容包裝成一個標籤(<app-root>)，並放置在想要顯示這些內容的 html 文件的 body 標籤中，以 app.component.ts 為例，預設放置位置在 app.component.html 中的 body 標籤中。
+@Component 是元件/畫面的相關設定，selector、templateUrl、styleUrls、imports 等等。
+補充一：app.component.ts 中 @Component 裡面的 selector: 'app-root' 表示將該元件對應的 html 中 body 的內容包裝成一個標籤(<app-root>)，並放置在想要顯示這些內容的 html 文件的 body 標籤中，以 app.component.ts 為例，預設放置位置在 app.component.html 中的 body 標籤中。
+補充二：component 可以是元件或畫面，如新建專案時自動生成的 app.component.ts 就是一個畫面，但如果想要 component 在別的畫面中嵌入(import 引用元件名稱並透過標籤<app-selectorName>嵌入想要引入的畫面)使用，那該 component 就是元件。
 
 會使用到的套件需要在頂部設定 import { 套件名稱 } from '套件來源/路徑'，如果畫面上有使用到該套件，則元件設定(@Component)中的 imports 需要加入該套件名稱。
 
 export class Appcomponent 代表將類別名稱為 Appcomponent 的這個元件做匯出，讓它在其他地方可以被引用，{}中是該元件的邏輯區域。
+
+建立新元件(Component) -> ng generate component 資料夾名稱/元件名稱，縮寫 ng g c 資料夾名稱/元件名稱。
 
 ### 變數 ###
 (全域)變數宣告方式 -> 變數名稱: 變數型別 = 初始值，ex: name: string = 'Tom';
@@ -62,3 +65,19 @@ ngAfterViewInit -> 畫面載入完成後執行，有時候畫面載入較慢而�
 
 ### 型別轉換 ###
 JSON 轉 String -> JSON.stringify(JSON格式資料)
+
+### forEach、map ###
+forEach -> 根據條件設定，遍歷可能會修改陣列本身內容。
+
+map -> 遍歷不會修改陣列本身，會額外產生一個新陣列，需要新增變數來接收遍歷後產生的新資料。
+
+### For迴圈 ###
+TypeScript 中的 for 迴圈沒有索引位置，如需要取用索引位置可以在迴圈外宣告一個表示索引的變數，初始值為 0，且每次執行時該變數 + 1，或是改用原生 JavaScript 的 for 迴圈。
+
+### 資料綁定(繫結) ###
+內嵌綁定 -> 
+屬性綁定 ->
+事件綁定 ->
+以上三者為單向綁定，簡單來說就是 ts 會觸發畫面(html)的更新，並且畫面的變更時不會影響 ts 的內容。
+
+雙向綁定 ->
