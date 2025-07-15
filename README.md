@@ -172,4 +172,65 @@ data.sort((a, b) => {
   return a.屬性 - b.屬性;
 })
 
-以上兩種方式邏輯相同
+以上兩種方式邏輯相同。
+
+### 即時(模糊)搜尋 ###
+以顯示列表為例，預設會顯示所有資料內容，當設定即時搜尋時，資料內容會根據輸入的內容顯示出符合內容的資料。
+實作：
+<!-- html -->
+<input (keyup)="searchData()" [(ngModel)]="inputContent"></input>
+
+<!-- TS(Global) -->
+inputConten!: string;
+
+searchData() {
+  let 新建的空陣列 = []; (建立空陣列存放每筆有符合使用者輸入的資料內容)
+  for(let 當前資料 of 所有資料陣列) {
+    if(當前資料.indexOf(this.inputContent) != -1) {
+      新建的空陣列.push(當前資料)
+    }
+  }
+  this.全域變數(資料陣列) = 新建的空陣列;
+}
+
+### ngClass ###
+動態切換 CSS 樣式。
+實作一(單一判斷)：
+<!-- html -->
+<p [ngClass]="{'txtStyle': status = true, 第二個樣式+判斷, 第三個樣式+判斷...}">文字內容</p> (當變數 status 為 true 時，txtStyle 樣式會套用)
+<button (click)="switchStatus()">
+
+<!-- CSS -->
+.txtStyle {
+  color: blue;
+}
+
+<!-- ts(Global) -->
+status: boolean = true;
+switchStatus() {
+  this.status = !this.status; (每次觸發方法就將布林值反轉)
+}
+
+實作二(多個判斷)：
+<!-- html -->
+<p [ngClass]="fn()">文字內容</p> (當變數 status 為 true 時，txtStyle 樣式會套用)
+<button (click)="switchStatus()">
+
+<!-- CSS -->
+.txtStyle {
+  color: blue;
+}
+
+<!-- ts(Global) -->
+status: boolean = true;
+switchStatus() {
+  this.status = !this.status; (每次觸發方法就將布林值反轉)
+}
+fn() {
+  if(!this.status) {
+    return 'txtStyle';
+  }
+  return ''; (ngClass 規定無論如何都必須要回傳一個值)
+}
+
+### RXJS Subscribe(訂閱) ###
