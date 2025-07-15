@@ -234,3 +234,60 @@ fn() {
 }
 
 ### RXJS Subscribe(訂閱) ###
+作用 -> 當 service 裡面的變數接收到傳遞頁要傳遞的資料時，接收頁需要一個地方去接收 service 裡被傳遞的資料，一般會在畫面載入時(ngOnInit)，但寫在 ngOnInit 只會在畫面載入時僅觸發一次，因此當觸發之後要是 service 中的資料再度更新，就不會立即再次接收 service 中更新的資料，此時如果使用 Subscribe(訂閱) 的方法，就可以在被訂閱的資料有做變更時，就會觸發訂閱並直接修改頁面中的內容。
+
+設定方式：
+  1.Subject -> 單純的訂閱，ex: private loading$ = new Subject<boolean>();
+
+  2.BehaviorSubject -> 需要設定初始值的訂閱，ex: private loading$ = new BehaviorSubject<boolean>(fales);
+
+  3.ReplaySubject -> 當觸發訂閱時，可以重新發送 N 筆資料的訂閱
+
+
+訂閱需要設定在共用的 Service(服務) 中，因此可以建立一個 service 來專門放訂閱相關的設定。
+
+以 @service/loading 為例：
+<!-- loading.service.ts -->
+import { BehaviorSubject, Subject } from 'rxjs';
+...
+...
+export class LoadingService {
+  // 分別宣告兩個(不用設定初始值、要設定初始值/僅示範兩者差異，視需求擇一即可)"私有"可以被訂閱的全域變數，設定私有(private)表示變數只能在 class 中做內容的修改，而無法在其他頁面呼叫做使用。
+  private loading$ = new Subject<boolean>();
+  private loading2$ = new BehaviorSubject<boolean>(false);
+
+  // 分別宣告兩個"公開"全域變數，值為前面可被訂閱全域變數接上"asObservable()"方法，表示 _loading$、_loading2$ 兩個變數只負責接收值而無法修改
+  _loading$ = this.loading$.asObservable();
+  _loading2$ = this.loading$.asObservable();
+
+  show() {
+    // 將訂閱的變數值換成(next方法傳入的值)，此時 private loading$ = new Subject<boolean>(); 沒有傳入初始值就會變成傳入 true，同理 private loading2$ = new BehaviorSubject<boolean>(false); 就會從傳入初始值 false 變成傳入 true。
+    this.loading$.next(true);
+    this.loading2$.next(ture);
+  }
+  
+  hide() {
+    this.loading$.next(false);
+    this.loading2$.next(false);
+  }
+}
+
+<!-- app.component.ts -->
+以 loading.service.ts 文件中的全域變數 loading$ 為例：
+export class AppComponent {
+
+  ngOnInit(): void {
+    // 訂閱的變數 _loading$ 如果有變更值，再執行下方內容
+    this.loadingService._loading$.subscribe((res) => {
+      alert('觸發訂閱 _loading$ 值為' + res);
+    })
+  }
+
+  clickBtn() {
+    // 觸發訂閱的變數修改其值
+    this.loadingService.show();
+  }
+}
+
+<!-- app.component.html -->
+<button (click)="clickBtn()">觸發訂閱</button>
